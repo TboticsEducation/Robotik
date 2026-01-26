@@ -1,7 +1,0 @@
-void ini() {
-
-}
-
-void itu() {
-
-}
