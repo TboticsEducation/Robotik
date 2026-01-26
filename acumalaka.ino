@@ -1,0 +1,7 @@
+void ini() {
+
+}
+
+void itu() {
+
+}
