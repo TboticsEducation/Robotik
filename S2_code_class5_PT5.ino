@@ -58,7 +58,7 @@ struct {
 /////////////////////////////////////////////
 
 
-#define LED_PIN 2   // pin LED
+#define LED_PIN 23   // pin LED
 
 void setup() {
   pinMode(LED_PIN, OUTPUT);
