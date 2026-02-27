@@ -33,30 +33,29 @@ void loop() {
 }
 
 void maju() {
-  digitalWrite(3, HIGH);
-  digitalWrite(4, LOW);
-  digitalWrite(5, HIGH);
-  digitalWrite(6, LOW);
+  digitalWrite(kiri1, HIGH);
+  digitalWrite(kiri2, LOW);
+  digitalWrite(kanan1, HIGH);
+  digitalWrite(kanan2, LOW);
 }
 
 void berhenti() {
-  digitalWrite(3, LOW);
-  digitalWrite(4, LOW);
-  digitalWrite(5, LOW);
-  digitalWrite(6, LOW);
+  digitalWrite(kiri1, LOW);
+  digitalWrite(kiri2, LOW);
+  digitalWrite(kanan1, LOW);
+  digitalWrite(kanan2, LOW);
 }
 
 void mundur() {
-  digitalWrite(3, LOW);  
-  digitalWrite(4, HIGH);
-  digitalWrite(5, LOW); 
-  digitalWrite(6, HIGH);
+  digitalWrite(kiri1, LOW);  
+  digitalWrite(kiri2, HIGH);
+  digitalWrite(kanan1, LOW); 
+  digitalWrite(kanan2, HIGH);
 }
 
 void putarBalik() {
-  digitalWrite(3, HIGH);  // motor kiri maju
-  digitalWrite(4, LOW);
-
-  digitalWrite(5, LOW);   // motor kanan mundur
-  digitalWrite(6, HIGH);
+  digitalWrite(kiri1, HIGH);  
+  digitalWrite(kiri2, LOW);
+  digitalWrite(kanan1, LOW);   
+  digitalWrite(kanan2, HIGH);
 }
