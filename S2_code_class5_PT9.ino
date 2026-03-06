@@ -25,7 +25,8 @@ struct {
 // PIN DEFINISI
 /////////////////////////////////////////////
 
-#define PIN_LAMPU 2
+#define PIN_LAMPU1 2
+#define PIN_LAMPU2 4
 #define PIN_KIPAS1 22
 #define PIN_KIPAS2 23
 #define PIN_BUZZER 19
@@ -41,14 +42,16 @@ void setup()
 {
   RemoteXY_Init ();  
   
-  pinMode(PIN_LAMPU, OUTPUT);
+  pinMode(PIN_LAMPU1, OUTPUT);
+  pinMode(PIN_LAMPU2, OUTPUT);
   pinMode(PIN_KIPAS1, OUTPUT);
   pinMode(PIN_KIPAS2, OUTPUT);
   pinMode(PIN_BUZZER, OUTPUT);
   pinMode(PIN_TRIG, OUTPUT);
   pinMode(PIN_ECHO, INPUT);
 
-  digitalWrite(PIN_LAMPU, LOW);
+  digitalWrite(PIN_LAMPU1, LOW);
+  digitalWrite(PIN_LAMPU2, LOW);
   digitalWrite(PIN_KIPAS1, LOW);
   digitalWrite(PIN_KIPAS2, LOW);
 }
@@ -60,9 +63,11 @@ void loop()
 
   // Kontrol Lampu
   if (RemoteXY.switch_01 == 1) {
-    digitalWrite(PIN_LAMPU, HIGH);
+    digitalWrite(PIN_LAMPU1, HIGH);
+    digitalWrite(PIN_LAMPU2, HIGH);
   } else {
-    digitalWrite(PIN_LAMPU, LOW);
+    digitalWrite(PIN_LAMPU1, LOW);
+    digitalWrite(PIN_LAMPU2, LOW);
   }
 
   // Kontrol Kipas
