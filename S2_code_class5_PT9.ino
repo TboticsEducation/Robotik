@@ -88,20 +88,28 @@ void loop()
   digitalWrite(PIN_TRIG, HIGH);
   delayMicroseconds(10);
   digitalWrite(PIN_TRIG, LOW);
-
+  
   // Baca pantulan
   durasi = pulseIn(PIN_ECHO, HIGH);
-
+  
   // Hitung jarak (cm)
   jarak = durasi * 0.034 / 2;
-
+  
   // Logika jarak
-  if (jarak < 10) {  // Dekat
-    digitalWrite(PIN_BUZZER, HIGH);
-  }
+  if (jarak < 10) {  // jika jarak kurang dari 10cm
+      
+    // Bunyi: bep bep bep bep 
+    for (int i = 0; i < 10; i++) {
+      digitalWrite(PIN_BUZZER, HIGH);
+      delay(100);   // lama bunyi
+      digitalWrite(PIN_BUZZER, LOW);
+      delay(100);   // jeda antar bunyi
+    }
+  
+  } 
   else {  // Jauh
     digitalWrite(PIN_BUZZER, LOW);
   }
-
+  
   delay(500);
 }
