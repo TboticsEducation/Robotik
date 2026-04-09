@@ -29,19 +29,23 @@ void loop() {
   if (bacaSensor == HIGH) {
     maju();
   } else {
-    indikator();
     berhenti();
     delay(300);
+    indikator();
     mundur();
     delay(600);
     putarBalik();
-    delay(1800);
+    delay(1000);
   }
 }
 
 void indikator() {
   digitalWrite(led, HIGH);
   digitalWrite(buzzer, HIGH);
+  delay(1000);
+  digitalWrite(led, LOW);
+  digitalWrite(buzzer, LOW);
+  delay(1000);
 }
 
 void maju() {
