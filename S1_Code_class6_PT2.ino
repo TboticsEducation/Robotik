@@ -1,5 +1,5 @@
 // =========================
-// LED RGB + Push Button
+// LED RGB + Push Button + Buzzer
 // ESP32 - SD Kelas 6
 // =========================
 
@@ -11,11 +11,18 @@ const int ledBiru  = 21;
 // Pin Push Button
 const int tombol = 2;
 
+// Pin Buzzer
+const int buzzer = 4;
+
 // Variabel warna
 int warna = 0;
 
 // Untuk mendeteksi sekali tekan
 bool tombolLama = HIGH;
+
+// Waktu buzzer
+unsigned long waktuBuzzer = 0;
+bool statusBuzzer = LOW;
 
 void setup() {
   pinMode(ledMerah, OUTPUT);
@@ -24,14 +31,28 @@ void setup() {
 
   pinMode(tombol, INPUT_PULLUP);
 
+  pinMode(buzzer, OUTPUT);
+
   matikanSemua();
 }
 
 void loop() {
 
+  // =========================
+  // Buzzer Bunyi Terus
+  // =========================
+  if (millis() - waktuBuzzer >= 200) {
+    waktuBuzzer = millis();
+
+    statusBuzzer = !statusBuzzer;
+    digitalWrite(buzzer, statusBuzzer);
+  }
+
+  // =========================
+  // Push Button
+  // =========================
   bool tombolSekarang = digitalRead(tombol);
 
-  // Jika tombol ditekan
   if (tombolLama == HIGH && tombolSekarang == LOW) {
 
     warna++;
@@ -52,7 +73,7 @@ void loop() {
       digitalWrite(ledBiru, HIGH);
     }
 
-    delay(200); // Mengurangi bouncing tombol
+    delay(200); // Anti bouncing
   }
 
   tombolLama = tombolSekarang;
