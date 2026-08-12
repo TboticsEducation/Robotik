@@ -32,7 +32,7 @@ Servo servo;
 
 // ==========================================
 // PARAMETER SERVO
-// Siswa bisa mengubah angka di sini
+// Ubah angka di sini
 // ==========================================
 
 int sudut1 = 0;       // Posisi pertama
