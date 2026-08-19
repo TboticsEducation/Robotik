@@ -38,9 +38,13 @@ Servo servo;
 int sudut1 = 0;       // Posisi pertama
 int sudut2 = 90;      // Posisi kedua
 int sudut3 = 180;     // Posisi ketiga
+int sudut4 = 0;     // Posisi keempat
 
-int waktuTunggu = 1000;   // Waktu tunggu dalam milidetik
+int waktuTunggu = 1000;   // Waktu tunggu setelah sampai posisi
                            // 1000 = 1 detik
+
+int kecepatanServo = 15;  // Semakin besar = semakin lambat
+                           // Semakin kecil = semakin cepat
 
 
 // ==========================================
@@ -78,13 +82,11 @@ void setup() {
   // Mengatur buzzer
   pinMode(buzzer, OUTPUT);
 
-
   // Menghubungkan servo ke pin 13
   servo.attach(pinServo);
 
   // Servo mulai dari posisi pertama
   servo.write(sudut1);
-
 
   // Mematikan semua LED
   matikanSemua();
@@ -118,13 +120,11 @@ void loop() {
 
   bool tombolSekarang = digitalRead(tombol);
 
-
   // Jika tombol baru saja ditekan
   if (tombolLama == HIGH && tombolSekarang == LOW) {
 
     // Pindah ke warna berikutnya
     warna++;
-
 
     // Jika sudah warna ke-3,
     // kembali ke warna pertama
@@ -132,71 +132,92 @@ void loop() {
       warna = 1;
     }
 
-
     // Matikan semua LED
     matikanSemua();
-
 
     // ----------------------------
     // WARNA 1 = MERAH
     // ----------------------------
 
     if (warna == 1) {
-
       digitalWrite(ledMerah, HIGH);
     }
-
 
     // ----------------------------
     // WARNA 2 = HIJAU
     // ----------------------------
 
     else if (warna == 2) {
-
       digitalWrite(ledHijau, HIGH);
     }
-
 
     // ----------------------------
     // WARNA 3 = BIRU
     // ----------------------------
 
     else if (warna == 3) {
-
       digitalWrite(ledBiru, HIGH);
     }
-
 
     // Anti bouncing tombol
     delay(200);
   }
 
-
   // Menyimpan kondisi tombol
   tombolLama = tombolSekarang;
 
 
-
   // ========================================
-  // SERVO BERGERAK SENDIRI
+  // SERVO BERGERAK SMOOTH
   // ========================================
 
   // Servo ke sudut pertama
-  servo.write(sudut1);
-
+  gerakSmooth(sudut1);
   delay(waktuTunggu);
-
 
   // Servo ke sudut kedua
-  servo.write(sudut2);
-
+  gerakSmooth(sudut2);
   delay(waktuTunggu);
-
 
   // Servo ke sudut ketiga
-  servo.write(sudut3);
-
+  gerakSmooth(sudut3);
   delay(waktuTunggu);
+
+  // Tambahkan lagi fungsi program gerakan sudut keempat disini
+
+}
+
+
+// ==========================================
+// FUNGSI SERVO BERGERAK SMOOTH
+// ==========================================
+
+void gerakSmooth(int tujuan) {
+
+  // Membaca posisi servo sekarang
+  int posisiSekarang = servo.read();
+
+  // Jika tujuan lebih besar
+  if (tujuan > posisiSekarang) {
+
+    for (int posisi = posisiSekarang; posisi <= tujuan; posisi++) {
+
+      servo.write(posisi);
+
+      delay(kecepatanServo);
+    }
+  }
+
+  // Jika tujuan lebih kecil
+  else {
+
+    for (int posisi = posisiSekarang; posisi >= tujuan; posisi--) {
+
+      servo.write(posisi);
+
+      delay(kecepatanServo);
+    }
+  }
 }
 
 
