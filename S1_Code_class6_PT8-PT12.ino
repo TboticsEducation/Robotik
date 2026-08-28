@@ -7,7 +7,7 @@ BluetoothSerial SerialBT;
 Servo palangServo;
 
 // Definisi PIN RFID
-#define SS_PIN  5
+#define SS_PIN  5 //sda
 #define RST_PIN 22
 MFRC522 rfid(SS_PIN, RST_PIN);
 
