@@ -1,86 +1,120 @@
+```cpp
 #include "BluetoothSerial.h"
 
 BluetoothSerial SerialBT;
 
-// PIN Komponen (Sesuai proyekmu)
+// ================= PIN =================
 const int pinRed = 12;
 const int pinGreen = 13;
 const int pinBlue = 14;
-const int pinBuzzer = 25; // Mengontrol buzzer
+const int pinBuzzer = 25;
 
+// ================= SETUP =================
 void setup() {
-  // Memulai Bluetooth dengan nama Tbot
+
+  Serial.begin(115200);
+
+  // Bluetooth
   SerialBT.begin("Tbot_Kelas5");
-  
-  // Mengatur semua PIN sebagai OUTPUT
+
+  // Output
   pinMode(pinRed, OUTPUT);
   pinMode(pinGreen, OUTPUT);
   pinMode(pinBlue, OUTPUT);
   pinMode(pinBuzzer, OUTPUT);
 
-  // Set warna awal (Bawaan contoh developer)
-  setColor(37, 166, 154); 
+  // Warna awal
+  setColor(0, 0, 0);
 }
 
+// ================= LOOP =================
 void loop() {
-  // Jika ada data masuk dari Bluetooth HP
-  if (SerialBT.available() > 0) {
-    // Membaca semua data yang tersedia di buffer saat itu
-    String command = SerialBT.readString();
-    command.trim(); // Membersihkan sisa spasi tak terlihat
 
-    // --- 1. FITUR RGB PICKER (Format 9 Digit Angka) ---
-    if (command.length() == 9) {
+  if (SerialBT.available() > 0) {
+
+    String command = SerialBT.readString();
+    command.trim();
+    command.toLowerCase();
+
+    // =========================================
+    // PERINTAH WARNA
+    // =========================================
+
+    if (command == "merah") {
+      setColor(255, 0, 0);
+      SerialBT.println("LED MERAH");
+    }
+
+    else if (command == "hijau") {
+      setColor(0, 255, 0);
+      SerialBT.println("LED HIJAU");
+    }
+
+    else if (command == "biru") {
+      setColor(0, 0, 255);
+      SerialBT.println("LED BIRU");
+    }
+
+    // =========================================
+    // MATIKAN LED
+    // =========================================
+
+    else if (command == "mati") {
+      setColor(0, 0, 0);
+      SerialBT.println("LED MATI");
+    }
+
+    // =========================================
+    // RGB PICKER
+    // Format: 255000128
+    // =========================================
+
+    else if (command.length() == 9) {
+
       int redValue = command.substring(0, 3).toInt();
       int greenValue = command.substring(3, 6).toInt();
-      int blueValue = command.substring(6).toInt();
+      int blueValue = command.substring(6, 9).toInt();
+
       setColor(redValue, greenValue, blueValue);
+
+      SerialBT.println("RGB BERUBAH");
     }
-    
-    // --- 2. FITUR SWITCH 1 SAMPAI 10 (Menggunakan indexOf) ---
-    // Jika teks di dalam kurung ditemukan di dalam variabel 'command'
-    else if (command.indexOf("ON1") >= 0)  { digitalWrite(pinBuzzer, HIGH); } 
-    else if (command.indexOf("OFF1") >= 0) { digitalWrite(pinBuzzer, LOW); }
-    
-    else if (command.indexOf("ON2") >= 0)  { digitalWrite(pinBuzzer, HIGH); } 
-    else if (command.indexOf("OFF2") >= 0) { digitalWrite(pinBuzzer, LOW); }
-    
-    else if (command.indexOf("ON3") >= 0)  { digitalWrite(pinBuzzer, HIGH); } 
-    else if (command.indexOf("OFF3") >= 0) { digitalWrite(pinBuzzer, LOW); }
-    
-    else if (command.indexOf("ON4") >= 0)  { digitalWrite(pinBuzzer, HIGH); } 
-    else if (command.indexOf("OFF4") >= 0) { digitalWrite(pinBuzzer, LOW); }
-    
-    else if (command.indexOf("ON5") >= 0)  { digitalWrite(pinBuzzer, HIGH); } 
-    else if (command.indexOf("OFF5") >= 0) { digitalWrite(pinBuzzer, LOW); }
-    
-    else if (command.indexOf("ON6") >= 0)  { digitalWrite(pinBuzzer, HIGH); } 
-    else if (command.indexOf("OFF6") >= 0) { digitalWrite(pinBuzzer, LOW); }
-    
-    else if (command.indexOf("ON7") >= 0)  { digitalWrite(pinBuzzer, HIGH); } 
-    else if (command.indexOf("OFF7") >= 0) { digitalWrite(pinBuzzer, LOW); }
-    
-    else if (command.indexOf("ON8") >= 0)  { digitalWrite(pinBuzzer, HIGH); } 
-    else if (command.indexOf("OFF8") >= 0) { digitalWrite(pinBuzzer, LOW); }
-    
-    else if (command.indexOf("ON9") >= 0)  { digitalWrite(pinBuzzer, HIGH); } 
-    else if (command.indexOf("OFF9") >= 0) { digitalWrite(pinBuzzer, LOW); }
-    
-    else if (command.indexOf("ON10") >= 0) { digitalWrite(pinBuzzer, HIGH); } 
-    else if (command.indexOf("OFF10") >= 0) { digitalWrite(pinBuzzer, LOW); }
-    
-    // --- 3. FITUR TERMINAL ---
+
+    // =========================================
+    // BUZZER
+    // =========================================
+
     else if (command.indexOf("speaker") >= 0) {
-      digitalWrite(pinBuzzer, HIGH);        
-      SerialBT.println("speaker aktif");    
-      delay(1000);                          
-      digitalWrite(pinBuzzer, LOW);         
+
+      digitalWrite(pinBuzzer, HIGH);
+
+      SerialBT.println("speaker aktif");
+
+      delay(1000);
+
+      digitalWrite(pinBuzzer, LOW);
+    }
+
+    // =========================================
+    // SWITCH
+    // =========================================
+
+    else if (command.indexOf("ON") >= 0) {
+      digitalWrite(pinBuzzer, HIGH);
+    }
+
+    else if (command.indexOf("OFF") >= 0) {
+      digitalWrite(pinBuzzer, LOW);
     }
   }
 }
 
+// ================= FUNGSI RGB =================
+
 void setColor(int red, int green, int blue) {
+
   analogWrite(pinRed, red);
   analogWrite(pinGreen, green);
   analogWrite(pinBlue, blue);
 }
+```
