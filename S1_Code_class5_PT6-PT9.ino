@@ -1,4 +1,3 @@
-```cpp
 #include "BluetoothSerial.h"
 
 BluetoothSerial SerialBT;
