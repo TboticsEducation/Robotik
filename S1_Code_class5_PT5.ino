@@ -4,9 +4,9 @@
 // ==========================================
 
 // Pin LED RGB
-const int ledMerah = 18;
-const int ledHijau = 19;
-const int ledBiru  = 21;
+const int ledMerah = 2;
+const int ledHijau = 4;
+const int ledBiru  = 5;
 
 // Pin Push Button
 const int tombol = 2;
