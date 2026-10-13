@@ -93,8 +93,11 @@ void loop() {
 
       // LED menyala
       digitalWrite(ledMerah, HIGH);
+      delay(500);
       digitalWrite(ledHijau, HIGH);
+      delay(500);
       digitalWrite(ledBiru, HIGH);
+      delay(500);
 
     }
     else {
