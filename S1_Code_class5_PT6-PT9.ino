@@ -35,6 +35,16 @@ void loop() {
     command.trim();
     command.toLowerCase();
 
+    // =================================================
+    // 1. FITUR RGB PICKER (Format 9 Digit Angka Murni)
+    // =================================================
+    if (command.length() == 9 && isDigit(command.charAt(0))) {
+      int redValue   = command.substring(0, 3).toInt();
+      int greenValue = command.substring(3, 6).toInt();
+      int blueValue  = command.substring(6, 9).toInt();
+      setColor(redValue, greenValue, blueValue);
+    }
+
     // =========================================
     // PERINTAH WARNA
     // =========================================
@@ -61,22 +71,6 @@ void loop() {
     else if (command == "mati") {
       setColor(0, 0, 0);
       SerialBT.println("LED MATI");
-    }
-
-    // =========================================
-    // RGB PICKER
-    // Format: 255000128
-    // =========================================
-
-    else if (command.length() == 9) {
-
-      int redValue = command.substring(0, 3).toInt();
-      int greenValue = command.substring(3, 6).toInt();
-      int blueValue = command.substring(6, 9).toInt();
-
-      setColor(redValue, greenValue, blueValue);
-
-      SerialBT.println("RGB BERUBAH");
     }
 
     // =========================================
