@@ -2,38 +2,42 @@
 
 BluetoothSerial SerialBT;
 
-// ================= PIN =================
+//====================== RGB ======================
 const int pinRed = 12;
 const int pinGreen = 13;
 const int pinBlue = 14;
+
+//==================== BUZZER =====================
 const int pinBuzzer = 25;
 
-// ================= SETUP =================
+// Deklarasi fungsi pendukung
+
+void setColor(int red, int green, int blue);
+
+
 void setup() {
+  Serial.begin(9600);
+  SerialBT.begin("kelas 5 p6-p9");
 
-  Serial.begin(115200);
-
-  // Bluetooth
-  SerialBT.begin("Tbot_Kelas5");
-
-  // Output
+  // Konfigurasi PIN sebagai OUTPUT
   pinMode(pinRed, OUTPUT);
   pinMode(pinGreen, OUTPUT);
   pinMode(pinBlue, OUTPUT);
   pinMode(pinBuzzer, OUTPUT);
 
-  // Warna awal
-  setColor(0, 0, 0);
+           // Pastikan robot diam saat awal dinyalakan
+  setColor(37, 166, 154); // Set warna awal RGB (Toska)
 }
 
-// ================= LOOP =================
 void loop() {
-
+  // Jika ada data masuk dari Bluetooth HP
   if (SerialBT.available() > 0) {
+    // Membaca data per baris kalimat (Mencegah data bertumpuk & merusak RGB picker)
+    String command = SerialBT.readStringUntil('\n');
+    command.trim(); // Membersihkan karakter enter atau spasi tak terlihat
 
-    String command = SerialBT.readString();
-    command.trim();
-    command.toLowerCase();
+    // JIKA DATA KOSONG, ABAIKAN PROSES DI BAWAH
+    if (command.length() == 0) return;
 
     // =================================================
     // 1. FITUR RGB PICKER (Format 9 Digit Angka Murni)
@@ -45,11 +49,22 @@ void loop() {
       setColor(redValue, greenValue, blueValue);
     }
 
-    // =========================================
-    // PERINTAH WARNA
-    // =========================================
+    // =================================================
+    // 2. FITUR KONTROL MOTOR & TERMINAL
+    // =================================================
 
-    if (command == "merah") {
+    else if (command.indexOf("klakson") >= 0) {
+      klakson();
+      SerialBT.println("Klakson Aktif");
+    }
+    else if (command.indexOf("speaker") >= 0) {
+      digitalWrite(pinBuzzer, HIGH);
+      SerialBT.println("Speaker Aktif");
+      delay(1000);
+      digitalWrite(pinBuzzer, LOW);
+    }
+    
+      if (command == "merah") {
       setColor(255, 0, 0);
       SerialBT.println("LED MERAH");
     }
@@ -63,51 +78,29 @@ void loop() {
       setColor(0, 0, 255);
       SerialBT.println("LED BIRU");
     }
+    // =================================================
+    // 3. FITUR SWITCH (1 Sampai 10)
+    // =================================================
+    else if (command.indexOf("ON1") >= 0)  { digitalWrite(pinBuzzer, HIGH); }
+    else if (command.indexOf("OFF1") >= 0) { digitalWrite(pinBuzzer, LOW); }
 
-    // =========================================
-    // MATIKAN LED
-    // =========================================
-
-    else if (command == "mati") {
-      setColor(0, 0, 0);
-      SerialBT.println("LED MATI");
-    }
-
-    // =========================================
-    // BUZZER
-    // =========================================
-
-    else if (command.indexOf("speaker") >= 0) {
-
-      digitalWrite(pinBuzzer, HIGH);
-
-      SerialBT.println("speaker aktif");
-
-      delay(1000);
-
-      digitalWrite(pinBuzzer, LOW);
-    }
-
-    // =========================================
-    // SWITCH
-    // =========================================
-
-    else if (command.indexOf("ON") >= 0) {
-      digitalWrite(pinBuzzer, HIGH);
-    }
-
-    else if (command.indexOf("OFF") >= 0) {
-      digitalWrite(pinBuzzer, LOW);
-    }
   }
 }
 
-// ================= FUNGSI RGB =================
-
+//=================================================
+// FUNGSI PENDUKUNG
+//=================================================
 void setColor(int red, int green, int blue) {
-
   analogWrite(pinRed, red);
   analogWrite(pinGreen, green);
   analogWrite(pinBlue, blue);
 }
-```
+
+void klakson() {
+  for (int i = 0; i < 3; i++) {
+    digitalWrite(pinBuzzer, HIGH);
+    delay(200);
+    digitalWrite(pinBuzzer, LOW);
+    delay(200);
+  }
+}
