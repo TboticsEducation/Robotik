@@ -37,7 +37,7 @@ void loop() {
   
       // Langkah 2: Maju 2,5 detik
       robotMaju();
-      delay(2500);
+      delay(5000);
   
       // Langkah 3: Berhenti sebentar
       robotBerhenti();
