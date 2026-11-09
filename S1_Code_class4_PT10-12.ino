@@ -4,28 +4,42 @@
 // TOMBOL 2 = ROBOT BERJALAN + RGB SIRINE
 //======================================================
 
-//--------------- PIN -----------------
-const int pinTombolGerak  = 2;
+// PIN
+const int pinTombolGerak = 2;
 const int pinTombolSirine = 3;
 
-// Driver Motor
+// MOTOR
 const int AIA = 5;
 const int AIB = 6;
 const int BIA = 9;
 const int BIB = 10;
 
-// RGB LED
+// RGB
 const int pinR = 11;
 const int pinG = 12;
 const int pinB = 13;
 
-//-------------------------------------
-
 unsigned long waktuRGB = 0;
 int warna = 0;
 
-void setup()
-{
+//======================================================
+// DEKLARASI FUNGSI (FUNCTION PROTOTYPE)
+//======================================================
+
+void robotMaju();
+void robotMundur();
+void robotBelokKanan();
+void robotBerhenti();
+void lampuMati();
+void updateSirine();
+void jalankanRobot(bool sirine);
+void gerak(void (*fungsiGerak)(), int waktu, bool sirine);
+
+//======================================================
+// SETUP
+//======================================================
+
+void setup() {
   pinMode(pinTombolGerak, INPUT_PULLUP);
   pinMode(pinTombolSirine, INPUT_PULLUP);
 
@@ -42,53 +56,40 @@ void setup()
   lampuMati();
 }
 
-void loop()
-{
+//======================================================
+// LOOP
+//======================================================
+
+void loop() {
   int mode = 0;
 
-  //==============================
-  // MENUNGGU TOMBOL
-  //==============================
-  while (true)
-  {
-    if (digitalRead(pinTombolGerak) == LOW)
-    {
-      delay(20); // debounce
+  while (true) {
+    if (digitalRead(pinTombolGerak) == LOW) {
+      delay(20);
 
-      if (digitalRead(pinTombolGerak) == LOW)
-      {
+      if (digitalRead(pinTombolGerak) == LOW) {
         mode = 1;
-
         while (digitalRead(pinTombolGerak) == LOW);
         break;
       }
     }
 
-    if (digitalRead(pinTombolSirine) == LOW)
-    {
+    if (digitalRead(pinTombolSirine) == LOW) {
       delay(20);
 
-      if (digitalRead(pinTombolSirine) == LOW)
-      {
+      if (digitalRead(pinTombolSirine) == LOW) {
         mode = 2;
-
         while (digitalRead(pinTombolSirine) == LOW);
         break;
       }
     }
   }
 
-  //==============================
-  // PILIH MODE
-  //==============================
-
-  if (mode == 1)
-  {
+  if (mode == 1) {
     jalankanRobot(false);
   }
 
-  if (mode == 2)
-  {
+  if (mode == 2) {
     jalankanRobot(true);
   }
 
@@ -97,19 +98,14 @@ void loop()
 }
 
 //======================================================
-// PROGRAM UTAMA ROBOT
+// PROGRAM GERAK ROBOT
 //======================================================
 
-void jalankanRobot(bool sirine)
-{
+void jalankanRobot(bool sirine) {
   gerak(robotMundur, 500, sirine);
-
   gerak(robotMaju, 2500, sirine);
-
   gerak(robotBelokKanan, 500, sirine);
-
   gerak(robotBelokKanan, 500, sirine);
-
   gerak(robotMaju, 2000, sirine);
 }
 
@@ -117,16 +113,13 @@ void jalankanRobot(bool sirine)
 // GERAK + RGB
 //======================================================
 
-void gerak(void (*fungsiGerak)(), int waktu, bool sirine)
-{
+void gerak(void (*fungsiGerak)(), int waktu, bool sirine) {
   fungsiGerak();
 
   unsigned long mulai = millis();
 
-  while (millis() - mulai < waktu)
-  {
-    if (sirine)
-    {
+  while (millis() - mulai < (unsigned long)waktu) {
+    if (sirine) {
       updateSirine();
     }
   }
@@ -136,27 +129,18 @@ void gerak(void (*fungsiGerak)(), int waktu, bool sirine)
 // RGB SIRINE
 //======================================================
 
-void updateSirine()
-{
-  if (millis() - waktuRGB >= 300)
-  {
+void updateSirine() {
+  if (millis() - waktuRGB >= 300) {
     waktuRGB = millis();
 
     warna++;
-
-    if (warna > 2)
-      warna = 0;
+    if (warna > 2) warna = 0;
 
     lampuMati();
 
-    if (warna == 0)
-      digitalWrite(pinR, HIGH);
-
-    else if (warna == 1)
-      digitalWrite(pinG, HIGH);
-
-    else
-      digitalWrite(pinB, HIGH);
+    if (warna == 0) digitalWrite(pinR, HIGH);
+    else if (warna == 1) digitalWrite(pinG, HIGH);
+    else digitalWrite(pinB, HIGH);
   }
 }
 
@@ -164,38 +148,30 @@ void updateSirine()
 // MOTOR
 //======================================================
 
-void robotMaju()
-{
+void robotMaju() {
   digitalWrite(AIA, LOW);
   digitalWrite(AIB, HIGH);
-
   digitalWrite(BIA, LOW);
   digitalWrite(BIB, HIGH);
 }
 
-void robotMundur()
-{
-  digitalWrite(AIA, LOW);
-  digitalWrite(AIB, HIGH);
-
-  digitalWrite(BIA, LOW);
-  digitalWrite(BIB, HIGH);
-}
-
-void robotBelokKanan()
-{
+void robotMundur() {
   digitalWrite(AIA, HIGH);
   digitalWrite(AIB, LOW);
+  digitalWrite(BIA, HIGH);
+  digitalWrite(BIB, LOW);
+}
 
+void robotBelokKanan() {
+  digitalWrite(AIA, HIGH);
+  digitalWrite(AIB, LOW);
   digitalWrite(BIA, LOW);
   digitalWrite(BIB, LOW);
 }
 
-void robotBerhenti()
-{
+void robotBerhenti() {
   digitalWrite(AIA, LOW);
   digitalWrite(AIB, LOW);
-
   digitalWrite(BIA, LOW);
   digitalWrite(BIB, LOW);
 }
@@ -204,8 +180,7 @@ void robotBerhenti()
 // RGB
 //======================================================
 
-void lampuMati()
-{
+void lampuMati() {
   digitalWrite(pinR, LOW);
   digitalWrite(pinG, LOW);
   digitalWrite(pinB, LOW);
